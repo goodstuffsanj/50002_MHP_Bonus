@@ -1,0 +1,28 @@
+module counter (
+    input clk,       // clock
+    input rst,       // reset
+    input sum,    // button input
+    input carry,
+    input clock,
+    output count[3]  // press counter
+  ) {
+  
+  .clk(clk) {
+    edge_detector edge_detector(#RISE(1), #FALL(0)); // detect rising edges
+    
+    .rst(rst) {
+       dff ctr[3]; // our lovely counter
+    }
+  }
+
+  always {
+    edge_detector.in = clock; // input to the edge_detector
+    count = ctr.q;                      // output the counter
+    
+    if (edge_detector.out){
+      if(sum == ctr.q[0]+ctr.q[1]+ctr.q[2] && carry == ctr.q[0]+ctr.q[1]+ctr.q[2] >= 2 ? 1 : 0){
+        ctr.d = ctr.q + 1;
+      }
+    }
+  }
+}

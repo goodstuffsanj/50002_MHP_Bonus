@@ -1,0 +1,13 @@
+module blinker (
+    input clk,  // clock
+    input rst,  // reset
+    output out
+  ) {
+  
+  dff ctr[27](.clk(clk), .rst(rst));
+  
+  always {
+    out = ctr.q[26];
+    ctr.d = ctr.q + 1;
+  }
+}
